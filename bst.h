@@ -249,7 +249,7 @@ protected:
 
     // Add helper functions here
     void clearHelper(Node<Key, Value> * toremove);
-    bool isBalancedHelper(Node<Key, Value> * root, int & maxHeight, int curHeight);
+    bool isBalancedHelper(Node<Key, Value> * root, int & maxHeight, int curHeight) const;
 
 
 protected:
@@ -502,6 +502,9 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
             if (isLeft) p->setLeft(NULL);
             else p->setRight(NULL);
         }
+				else {
+						root_ = NULL;
+				}
     }
     else { // promote one child
         Node<Key, Value> * child = toremove->getLeft();
@@ -509,7 +512,12 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
         if (!isRoot) {
             if (isLeft) p->setLeft(child);
             else p->setRight(child);
+						child->setParent(p);
         }
+				else {
+					root_ = child;
+					child->setParent(NULL);
+				}
     }
     delete toremove;
 }
@@ -571,15 +579,21 @@ void BinarySearchTree<Key, Value>::clear()
 {
     // TODO
     clearHelper(root_);
+		root_ = NULL;
 }
 
 template<typename Key, typename Value>
 void BinarySearchTree<Key, Value>::clearHelper(Node<Key, Value> * toremove)
 {
     if (toremove == NULL) return;
-    clearHelper(toremove->getLeft());
-    clearHelper(toremove->getRight());
-    delete toremove;
+		Node<Key, Value> * tempLeft = toremove->getLeft();
+		Node<Key, Value> * tempRight = toremove->getRight();
+		toremove->setParent(NULL);
+		toremove->setLeft(NULL);
+		toremove->setRight(NULL);
+    clearHelper(tempLeft);
+    clearHelper(tempRight);
+		delete toremove;
 }
 
 
@@ -610,14 +624,10 @@ Node<Key, Value>* BinarySearchTree<Key, Value>::internalFind(const Key& key) con
     Node<Key, Value> * root = root_;
     while (root != NULL) {
         if (key > root->getKey()) {
-            if (root->getRight() != NULL) {
-                root = root->getRight();
-            }
+            root = root->getRight();
         }
         else if (key < root->getKey()) {
-            if (root->getLeft() != NULL) {
-                root = root->getLeft();
-            }
+            root = root->getLeft();
         }
         else {
             return root;
@@ -627,7 +637,7 @@ Node<Key, Value>* BinarySearchTree<Key, Value>::internalFind(const Key& key) con
 }
 
 template<typename Key, typename Value>
-bool BinarySearchTree<Key, Value>::isBalancedHelper(Node<Key, Value> * root, int & maxHeight, int curHeight)
+bool BinarySearchTree<Key, Value>::isBalancedHelper(Node<Key, Value> * root, int & maxHeight, int curHeight) const
 {
     if(root == NULL) {
         --curHeight;
@@ -637,7 +647,8 @@ bool BinarySearchTree<Key, Value>::isBalancedHelper(Node<Key, Value> * root, int
         return true;
     }
 
-    int leftHeight, rightHeight = 0;
+    int leftHeight = 0;
+		int rightHeight = 0;
     bool leftBalanced = isBalancedHelper(root->getLeft(), leftHeight, curHeight+1);
     bool rightBalanced = isBalancedHelper(root->getRight(), rightHeight, curHeight+1);
 
@@ -649,7 +660,7 @@ bool BinarySearchTree<Key, Value>::isBalancedHelper(Node<Key, Value> * root, int
         maxHeight = rightHeight;
     }
 
-    bool withinOne = diff < 1 && diff > -1;
+    bool withinOne = (diff < 1) && (diff > -1);
     return (leftBalanced && rightBalanced && withinOne);
 }
 
