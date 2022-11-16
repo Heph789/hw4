@@ -248,6 +248,7 @@ protected:
     virtual void nodeSwap( Node<Key,Value>* n1, Node<Key,Value>* n2) ;
 
     // Add helper functions here
+    // Node<Key,Value> * insertReturn(const std::pair<const Key, Value>& keyValuePair); //TODO
     void clearHelper(Node<Key, Value> * toremove);
     bool isBalancedHelper(Node<Key, Value> * root, int & maxHeight, int curHeight) const;
 
@@ -605,6 +606,7 @@ Node<Key, Value>*
 BinarySearchTree<Key, Value>::getSmallestNode() const
 {
     // TODO
+    if (empty()) return NULL;
     Node<Key, Value> * smallest = root_;
     while (smallest->getLeft() != NULL) {
         smallest = smallest->getLeft();
@@ -660,7 +662,7 @@ bool BinarySearchTree<Key, Value>::isBalancedHelper(Node<Key, Value> * root, int
         maxHeight = rightHeight;
     }
 
-    bool withinOne = (diff < 1) && (diff > -1);
+    bool withinOne = (diff <= 1) && (diff >= -1);
     return (leftBalanced && rightBalanced && withinOne);
 }
 
