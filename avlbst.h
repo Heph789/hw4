@@ -209,7 +209,7 @@ void AVLTree<Key, Value>::insertFix(AVLNode<Key,Value> * n)
     if (g->getBalance() == 0) {
         insertFix(p);
     }
-    else if (g->getBalance() == 1) // right side out of wack
+    else if (g->getBalance() == 1 && g->getRight() == p) // right side out of wack
     {
         if (p->getBalance() == 1) rotateLeft(g);
         else if (p->getBalance() == -1) {
@@ -234,7 +234,7 @@ void AVLTree<Key, Value>::insertFix(AVLNode<Key,Value> * n)
                 std::cout << "This is not supposed to execute. (5)" << std::endl;
         }
     }
-    else if (g->getBalance() == -1)
+    else if (g->getBalance() == -1 && g->getLeft() == p)
     {
         if (p->getBalance() == -1) rotateRight(g);
         else if (p->getBalance() == 1) {
