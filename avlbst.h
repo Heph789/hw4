@@ -280,6 +280,7 @@ void AVLTree<Key, Value>::rotateRight(AVLNode<Key,Value> * root)
     rootNew->setParent(p);
     if (pIsLeft == 1) p->setLeft(rootNew);
     else if (pIsLeft == 0) p->setRight(rootNew);
+    else this->root_ = rootNew;
 
     right->setLeft(rightsLeft);
     if (rightsLeft != NULL) rightsLeft->setParent(right);
@@ -306,6 +307,7 @@ void AVLTree<Key, Value>::rotateLeft(AVLNode<Key,Value> * root)
     rootNew->setParent(p);
     if (pIsLeft == 1) p->setLeft(rootNew);
     else if (pIsLeft == 0) p->setRight(rootNew);
+    else this->root_ = rootNew;
 
     left->setRight(leftsRight);
     if (leftsRight != NULL) leftsRight->setParent(left);
