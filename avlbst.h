@@ -153,7 +153,9 @@ template<class Key, class Value>
 void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
 {
     // TODO
+    std::cout << "Inserting " << new_item.first << std::endl;
     AVLNode<Key, Value> * root = static_cast<AVLNode<Key, Value>*>(this->root_);
+    if (root != NULL) std::cout << "Balance: " << (int)(root->getBalance()) << std::endl;
     while (root != NULL) {
         if (new_item.first > root->getKey()) { // if the key is greater than the root
             if (root->getRight() == NULL) { // and there's empty space to the right
@@ -211,55 +213,65 @@ void AVLTree<Key, Value>::insertFix(AVLNode<Key,Value> * n)
     }
     else if (g->getBalance() == 1 && g->getRight() == p) // right side out of wack
     {
-        if (p->getBalance() == 1) rotateLeft(g);
+        if (p->getBalance() == 1) {
+            rotateLeft(g);
+            p->setBalance(0);
+            g->setBalance(0);
+        }
         else if (p->getBalance() == -1) {
             rotateRight(p);
             rotateLeft(g);
+            switch (n->getBalance()) {
+                case 1:
+                    p->setBalance(0);
+                    g->setBalance(-1);
+                    break;
+                case 0:
+                    p->setBalance(0);
+                    g->setBalance(0);
+                    break;
+                case -1:
+                    p->setBalance(1);
+                    g->setBalance(0);
+                    break;
+                default:
+                    std::cout << "This is not supposed to execute. (5)" << std::endl;
+            }
+            n->setBalance(0);
         }
         else std::cout << "This is not supposed to execute. (3)" << std::endl;
-        switch (n->getBalance()) {
-            case -1:
-                p->setBalance(0);
-                g->setBalance(-1);
-                break;
-            case 0:
-                p->setBalance(0);
-                g->setBalance(0);
-                break;
-            case 1:
-                p->setBalance(1);
-                g->setBalance(0);
-                break;
-            default:
-                std::cout << "This is not supposed to execute. (5)" << std::endl;
-        }
     }
     else if (g->getBalance() == -1 && g->getLeft() == p)
     {
-        if (p->getBalance() == -1) rotateRight(g);
+        if (p->getBalance() == -1) {
+            rotateRight(g);
+            p->setBalance(0);
+            g->setBalance(0);
+        }
         else if (p->getBalance() == 1) {
             rotateLeft(p);
             rotateRight(g);
+            switch (n->getBalance()) {
+                case -1:
+                    p->setBalance(0);
+                    g->setBalance(1);
+                    break;
+                case 0:
+                    p->setBalance(0);
+                    g->setBalance(0);
+                    break;
+                case 1:
+                    p->setBalance(-1);
+                    g->setBalance(0);
+                    break;
+                default:
+                    std::cout << "This is not supposed to execute. (6)" << std::endl;
+            }
+            n->setBalance(0);
         }
         else std::cout << "This is not supposed to execute. (4)" << std::endl;
-        switch (n->getBalance()) {
-            case -1:
-                p->setBalance(0);
-                g->setBalance(1);
-                break;
-            case 0:
-                p->setBalance(0);
-                g->setBalance(0);
-                break;
-            case 1:
-                p->setBalance(-1);
-                g->setBalance(0);
-                break;
-            default:
-                std::cout << "This is not supposed to execute. (6)" << std::endl;
-        }
     }
-    else std::cout << "This is not supposed to execute. (2)" << std::endl;
+    else g->setBalance(0); // if you add height on the shorter side of g, then it becomes balanced and you're done
 }
 
 template<class Key, class Value>

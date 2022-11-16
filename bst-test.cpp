@@ -30,19 +30,19 @@ int main(int argc, char *argv[])
 
     // AVL Tree Tests
     AVLTree<int,int> at;
-    at.insert(std::make_pair(5,1));
-    at.print();
-    at.insert(std::make_pair(2,2));
-    at.print();
-    at.insert(std::make_pair(3,2));
+    at.insert(std::make_pair(6,1));
     at.print();
     at.insert(std::make_pair(11,2));
     at.print();
-    at.insert(std::make_pair(6,2));
+    at.insert(std::make_pair(0,2));
     at.print();
-    at.insert(std::make_pair(7,2));
+    at.insert(std::make_pair(44,2));
     at.print();
-    at.insert(std::make_pair(9,2));
+    at.insert(std::make_pair(21,2));
+    at.print();
+    at.insert(std::make_pair(20,2));
+    at.print();
+    at.insert(std::make_pair(4,2));
     at.print();
 
     cout << "Is balanced: " << at.isBalanced() << endl;
