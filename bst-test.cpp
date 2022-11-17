@@ -39,6 +39,7 @@ int main(int argc, char *argv[])
 	at.remove(5);
     at.print();
     cout << "Is balanced: " << at.isBalanced() << endl;
+    at.clear();
 
     // cout << "\nAVLTree contents:" << endl;
     // for(AVLTree<char,int>::iterator it = at.begin(); it != at.end(); ++it) {

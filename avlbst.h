@@ -153,9 +153,7 @@ template<class Key, class Value>
 void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
 {
     // TODO
-    std::cout << "Inserting " << new_item.first << std::endl;
     AVLNode<Key, Value> * root = static_cast<AVLNode<Key, Value>*>(this->root_);
-    if (root != NULL) std::cout << "Balance: " << (int)(root->getBalance()) << std::endl;
     while (root != NULL) {
         if (new_item.first > root->getKey()) { // if the key is greater than the root
             if (root->getRight() == NULL) { // and there's empty space to the right
@@ -189,11 +187,6 @@ template<class Key, class Value>
 void AVLTree<Key, Value>::insertFix(AVLNode<Key,Value> * n)
 {
     AVLNode<Key,Value> * p = n->getParent();
-    if (p == NULL)
-    {
-        std::cout << "NULL parent not supposed to happen." << std::endl;
-        return;
-    }
 
     if (p->getBalance() == 1 || p->getBalance() == -1) {
         p->setBalance(0); // a parent with one child before insert is 0 balanced after insert
@@ -203,7 +196,6 @@ void AVLTree<Key, Value>::insertFix(AVLNode<Key,Value> * n)
         p->setBalance(-1); // right - left
     } 
     else if (p->getRight() == n) p->setBalance(1);
-    else std::cout << "This is not supposed to execute. (1)" << std::endl;
 
     AVLNode<Key,Value> * g = p->getParent();
     if (g == NULL) return; // can't unbalance if inserting right after the root
@@ -234,12 +226,9 @@ void AVLTree<Key, Value>::insertFix(AVLNode<Key,Value> * n)
                     p->setBalance(1);
                     g->setBalance(0);
                     break;
-                default:
-                    std::cout << "This is not supposed to execute. (5)" << std::endl;
             }
             n->setBalance(0);
         }
-        else std::cout << "This is not supposed to execute. (3)" << std::endl;
     }
     else if (g->getBalance() == -1 && g->getLeft() == p)
     {
@@ -264,12 +253,9 @@ void AVLTree<Key, Value>::insertFix(AVLNode<Key,Value> * n)
                     p->setBalance(-1);
                     g->setBalance(0);
                     break;
-                default:
-                    std::cout << "This is not supposed to execute. (6)" << std::endl;
             }
             n->setBalance(0);
         }
-        else std::cout << "This is not supposed to execute. (4)" << std::endl;
     }
     else g->setBalance(0); // if you add height on the shorter side of g, then it becomes balanced and you're done
 }
@@ -283,10 +269,6 @@ void AVLTree<Key, Value>::rotateRight(AVLNode<Key,Value> * root)
     else if (p->getRight() == root) pIsLeft = 0;
     AVLNode<Key,Value> * right = root;
     AVLNode<Key,Value> * rootNew = root->getLeft();
-    if (rootNew == NULL) {
-        std::cout << "Trying to rotate NULL to root" << std::endl;
-        return;
-    }
     AVLNode<Key,Value> * rightsLeft = rootNew->getRight();
 
     rootNew->setParent(p);
@@ -310,10 +292,6 @@ void AVLTree<Key, Value>::rotateLeft(AVLNode<Key,Value> * root)
     else if (p->getRight() == root) pIsLeft = 0;
     AVLNode<Key,Value> * left = root;
     AVLNode<Key,Value> * rootNew = root->getRight();
-    if (rootNew == NULL) {
-        std::cout << "Trying to rotate NULL to root" << std::endl;
-        return;
-    }
     AVLNode<Key,Value> * leftsRight = rootNew->getLeft();
 
     rootNew->setParent(p);
