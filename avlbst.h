@@ -349,7 +349,7 @@ void AVLTree<Key, Value>:: remove(const Key& key)
     if(!isRoot && (toremove == p->getLeft())) isLeft = true;
 
     if (toremove->getLeft() == NULL && toremove->getRight() == NULL) { // a leaf
-        if (!isRoot) { 
+        if (!isRoot) {
             if (isLeft) p->setLeft(NULL);
             else p->setRight(NULL);
         }
@@ -382,8 +382,8 @@ void AVLTree<Key, Value>::removeFix(AVLNode<Key,Value> * n, int diff)
 {
     if(n == NULL) return;
     AVLNode<Key,Value> * p = n->getParent();
-    int ndiff = 1;
-    if(!(p == NULL) && (n == p->getLeft())) ndiff = -1;
+    int ndiff = -1;
+    if(!(p == NULL) && (n == p->getLeft())) ndiff = 1;
 
     switch(n->getBalance() + diff)
     {
@@ -424,9 +424,6 @@ void AVLTree<Key, Value>::removeFix(AVLNode<Key,Value> * n, int diff)
         case 0:
             n->setBalance(0);
             removeFix(p, ndiff);
-            break;
-        case 1:
-            n->setBalance(1);
             break;
         case 2:
             {
